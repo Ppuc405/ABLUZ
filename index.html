@@ -4,46 +4,82 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ABLuz — Poesía</title>
-  <meta name="theme-color" content="#111" />
+  <meta name="theme-color" content="#000" />
   <style>
-    :root { --w: 480px; }
+    :root { --w: 520px; }
     * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui, Arial, sans-serif; background:#f6f7fb; color:#222; }
-    .wrap { max-width:var(--w); margin:0 auto; padding:24px 16px 40px; }
-    header { text-align:center; margin-bottom:16px; }
-    h1 { font-size:28px; margin:0 0 6px; }
-    .subtitle { color:#666; font-size:14px; }
-    .card { background:#fff; border-radius:18px; padding:18px; box-shadow:0 8px 24px rgba(0,0,0,.08); margin:14px 0; }
-    .card h2 { font-size:20px; margin:0 0 10px; }
+    html, body { height: 100%; }
+    body { margin:0; font-family: system-ui, Arial, sans-serif; color:#fff; }
+
+    /* ====== VIDEO DE FONDO ====== */
+    .bg-video{
+      position: fixed; inset: 0; z-index: -2;
+      width:100%; height:100%; object-fit:cover;
+    }
+    /* Suaviza contraste para que el texto se lea */
+    .scrim{
+      position: fixed; inset: 0; z-index: -1;
+      background: radial-gradient(120% 120% at 50% 10%, rgba(0,0,0,.15), rgba(0,0,0,.65) 60%, rgba(0,0,0,.8));
+      pointer-events: none;
+    }
+
+    /* ====== CONTENIDO ====== */
+    .wrap { max-width:var(--w); margin:0 auto; padding:28px 16px 60px; }
+    header { text-align:center; margin-bottom:14px; }
+    h1 { font-size:30px; margin:0 0 6px; letter-spacing:.5px; }
+    .subtitle { opacity:.85; font-size:14px; }
+
+    .card {
+      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius:20px; padding:18px; margin:14px 0;
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+    .card h2 { margin:0 0 12px; font-size:18px; opacity:.95; }
+
+    /* YouTube responsive 16:9 */
     .video-box { position:relative; width:100%; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#000; }
     .video-box iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
-    .poem { font-size:18px; line-height:1.6; text-align:justify; white-space:pre-wrap; }
-    footer { text-align:center; color:#888; font-size:12px; margin-top:18px; }
+
+    .poem { font-size:18px; line-height:1.65; white-space:pre-wrap; }
+    footer { text-align:center; opacity:.7; font-size:12px; margin-top:20px; }
   </style>
 </head>
 <body>
+  <!-- VIDEO DE FONDO (tu archivo subido al repo) -->
+  <video class="bg-video" src="VIDEOSUR.mp4" autoplay muted loop playsinline></video>
+  <div class="scrim"></div>
+
   <main class="wrap">
     <header>
       <h1>ABLuz</h1>
-      <div class="subtitle">Video + Poesía</div>
+      <div class="subtitle">Video de fondo + canción + poesía</div>
     </header>
 
-    <!-- VIDEO -->
+    <!-- CANCIÓN DE YOUTUBE (arriba) -->
     <section class="card">
+      <h2>Para ti…</h2>
       <div class="video-box">
+        <!-- ID fijo: -HBx9G09b64 (empieza a 0:20, autoplay mudo por políticas del navegador) -->
         <iframe
-          src="https://www.youtube.com/embed/-HBx9G09b64?start=20&autoplay=1&mute=1&modestbranding=1&rel=0"
-          title="YouTube"
+          src="https://www.youtube.com/embed/-HBx9G09b64?start=20&autoplay=1&mute=1&playsinline=1&modestbranding=1&rel=0"
+          title="YouTube player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen></iframe>
+          allowfullscreen>
+        </iframe>
       </div>
+      <small style="display:block;opacity:.75;margin-top:8px">
+        Nota: los navegadores móviles requieren iniciar en silencio para reproducir automáticamente. Puedes activar el sonido en el reproductor.
+      </small>
     </section>
 
-    <!-- POEMA -->
+    <!-- POEMA ABAJO -->
     <section class="card">
       <h2>Título del poema</h2>
       <p class="poem">
 Escribe aquí tu poema.
+Este bloque respeta saltos de línea y está pensado para leerse cómodo en el celular.
       </p>
     </section>
 
