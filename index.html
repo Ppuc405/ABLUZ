@@ -107,25 +107,37 @@ Y al ver mi amor tan tuyo, tan franco y comprendiendo...
   </main>
 
   <script>
-    // Fondo no necesita jump; es loop de ambiente
-    const song = document.getElementById('song');
-    const hint = document.getElementById('hint');
-    const songBox = document.getElementById('songBox');
+  // Fondo no necesita jump; es loop de ambiente
+  const song = document.getElementById('song');
+  const hint = document.getElementById('hint');
+  const songBox = document.getElementById('songBox');
 
-    // Inicia la canción desde 0:20 cuando carguen metadatos
-    song.addEventListener('loadedmetadata', () => {
-      try { song.currentTime = 20; } catch(_) {}
-      const p = song.play();
-      if (p && p.catch) p.catch(()=>{}); // Algunos navegadores requieren interacción previa
-    });
+  // 1. **Salto de tiempo:** Inicia la canción desde 0:20 cuando carguen metadatos.
+  // Es mejor no forzar el play aquí, solo establecer el tiempo.
+  song.addEventListener('loadedmetadata', () => {
+    try { song.currentTime = 20; } catch(_) {}
+    // El 'autoplay' del HTML ya se encarga de iniciar la reproducción silenciosa.
+  });
 
-    // Un toque activa el audio (sin tener que presionar Play)
-    songBox.addEventListener('pointerdown', () => {
-      song.muted = false;
-      song.volume = 1.0;
-      song.play();
-      if (hint) hint.style.display = 'none';
-    }, { once:true });
-  </script>
+  // 2. **Activación de Audio al Tocar:**
+  songBox.addEventListener('pointerdown', () => {
+    // Si ya no está silenciado, no hacemos nada para evitar problemas.
+    if (!song.muted) {
+      if (hint) hint.style.display = 'none'; // Aseguramos que el hint se vaya.
+      return;
+    }
+
+    // Desactivamos el silencio y subimos el volumen.
+    song.muted = false;
+    song.volume = 1.0;
+
+    // NO LLAMAMOS a song.play() de nuevo.
+    // El video ya está intentando reproducirse (silenciosamente) gracias al `autoplay` del HTML.
+    // Al quitar el `muted`, automáticamente debería sonar sin necesidad de un nuevo `play()`.
+    
+    // Ocultamos la sugerencia
+    if (hint) hint.style.display = 'none';
+  }, { once:true });
+</script>
 </body>
 </html>
