@@ -2,79 +2,103 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>ABLuz — Poesía</title>
   <meta name="theme-color" content="#000" />
   <style>
     :root { --w: 520px; }
+
+    /* Reset & base */
     * { box-sizing: border-box; }
     html, body { height: 100%; }
-    body { margin:0; font-family: system-ui, Arial, sans-serif; color:#fff; }
+    body {
+      margin: 0;
+      background: #000;          /* evita “barra blanca” en móviles */
+      color: #fff;
+      overflow-x: hidden;
+    }
 
     /* ====== VIDEO DE FONDO ====== */
     .bg-video{
-      position: fixed; inset: 0; z-index: -2;
-      width:100%; height:100%; object-fit:cover;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100dvh;           /* alto real del viewport móvil */
+      min-height: 100vh;        /* fallback */
+      object-fit: cover;        /* llena la pantalla sin deformarse */
+      z-index: -2;
+      display: block;
+      background: #000;
     }
-    /* Suaviza contraste para que el texto se lea */
     .scrim{
       position: fixed; inset: 0; z-index: -1;
-      background: radial-gradient(120% 120% at 50% 10%, rgba(0,0,0,.15), rgba(0,0,0,.65) 60%, rgba(0,0,0,.8));
+      background: radial-gradient(120% 120% at 50% 10%, rgba(0,0,0,.1), rgba(0,0,0,.65) 60%, rgba(0,0,0,.8));
       pointer-events: none;
     }
 
     /* ====== CONTENIDO ====== */
-    .wrap { max-width:var(--w); margin:0 auto; padding:28px 16px 60px; }
+    .wrap {
+      max-width: var(--w);
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+      min-height: 100dvh;
+      padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); /* respeta notch/borde */
+    }
     header { text-align:center; margin-bottom:14px; }
     h1 { font-size:30px; margin:0 0 6px; letter-spacing:.5px; }
-    .subtitle { opacity:.85; font-size:14px; }
 
     .card {
       backdrop-filter: blur(6px);
       background: rgba(0,0,0,.35);
       border: 1px solid rgba(255,255,255,.12);
-      border-radius:20px; padding:18px; margin:14px 0;
+      border-radius: 20px;
+      padding: 18px;
+      margin: 14px 0;
       box-shadow: 0 12px 30px rgba(0,0,0,.25);
     }
-    .card h2 { margin:0 0 12px; font-size:18px; opacity:.95; }
-
-    /* YouTube responsive 16:9 */
-    .video-box { position:relative; width:100%; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#000; }
-    .video-box iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .card h2 { margin:0 0 10px; font-size:18px; opacity:.95; }
 
     .poem { font-size:18px; line-height:1.65; white-space:pre-wrap; }
-    footer { text-align:center; opacity:.7; font-size:12px; margin-top:20px; }
+
+    /* “Toca para activar sonido” */
+    .tap-audio {
+      position: fixed;
+      right: 12px;
+      bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      background:#111; color:#fff;
+      font-size:12px; padding:8px 10px; border-radius:999px;
+      opacity:.9; z-index: 10;
+      user-select:none; -webkit-user-select:none;
+    }
   </style>
 </head>
 <body>
   <!-- VIDEO DE FONDO (tu archivo subido al repo) -->
-  <video class="bg-video" src="VIDEOSUR.mp4" autoplay muted loop playsinline></video>
+  <!-- Usa la ruta URL-encoded, porque tu nombre tiene espacios, comas y paréntesis -->
+  <video
+    id="bgvid"
+    class="bg-video"
+    playsinline
+    muted
+    autoplay
+    loop
+    preload="auto"
+  >
+    <source
+      src="GINO%20MELLA,%20JUANKA%20-%20PARQUE%20ARAUCO%20%20PROD.%20MONTANA%20THE%20PRODUCER%20-%20Gino%20Mella%20(360p,%20h264).mp4"
+      type="video/mp4" />
+  </video>
   <div class="scrim"></div>
+
+  <!-- Indicador para activar sonido (se oculta tras el primer toque) -->
+  <div id="hint" class="tap-audio">🔊 toca para activar sonido</div>
 
   <main class="wrap">
     <header>
-      <h1>ABLuz</h1>
-      <div class="subtitle">Video de fondo + canción + poesía</div>
+      <h1>Para ti…</h1>
     </header>
 
-    <!-- CANCIÓN DE YOUTUBE (arriba) -->
-    <section class="card">
-      <h2>Para ti…</h2>
-      <div class="video-box">
-        <!-- ID fijo: -HBx9G09b64 (empieza a 0:20, autoplay mudo por políticas del navegador) -->
-        <iframe
-          src="https://www.youtube.com/embed/-HBx9G09b64?start=20&autoplay=1&mute=1&playsinline=1&modestbranding=1&rel=0"
-          title="YouTube player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
-        </iframe>
-      </div>
-      <small style="display:block;opacity:.75;margin-top:8px">
-        Nota: los navegadores móviles requieren iniciar en silencio para reproducir automáticamente. Puedes activar el sonido en el reproductor.
-      </small>
-    </section>
-
-    <!-- POEMA ABAJO -->
+    <!-- POEMA -->
     <section class="card">
       <h2>Título del poema</h2>
       <p class="poem">
@@ -83,7 +107,34 @@ Este bloque respeta saltos de línea y está pensado para leerse cómodo en el c
       </p>
     </section>
 
-    <footer>© ABLuz</footer>
+    <!-- Si quieres más secciones, agrégalas aquí -->
   </main>
+
+  <script>
+    const video = document.getElementById('bgvid');
+    const hint  = document.getElementById('hint');
+
+    // Arranca desde 0:20 cuando el video conoce su duración
+    video.addEventListener('loadedmetadata', () => {
+      try { video.currentTime = 20; } catch (_) {}
+      const p = video.play();
+      if (p && p.catch) p.catch(()=>{}); // algunos navegadores piden interacción
+    });
+
+    // Primer toque: activa audio (sin presionar "play")
+    window.addEventListener('pointerdown', () => {
+      video.muted = false;
+      video.volume = 1.0;
+      video.play();
+      if (hint) hint.style.display = 'none';
+    }, { once:true });
+
+    // Evita scroll por “rebote” que revele fondo blanco
+    document.addEventListener('touchmove', function(e){
+      if (document.scrollingElement.scrollTop <= 0 && e.touches[0].clientY > 0) {
+        // no hacemos nada especial; el fondo ya es negro
+      }
+    }, {passive:true});
+  </script>
 </body>
 </html>
