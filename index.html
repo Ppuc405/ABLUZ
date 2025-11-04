@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ABLuz — Poesía</title>
+  <style>
+    :root { --maxw: 480px; }
+    * { box-sizing: border-box; }
+    body{
+      margin:0; font-family: system-ui, Arial, sans-serif; background:#f6f7fb; color:#222;
+    }
+    .wrap{
+      max-width: var(--maxw);
+      margin:0 auto; padding:24px 16px 40px;
+    }
+    header{
+      text-align:center; margin-bottom:16px;
+    }
+    h1{ font-size:28px; margin:0 0 6px; }
+    .subtitle{ color:#666; font-size:14px; }
+
+    .card{
+      background:#fff; border-radius:18px; padding:18px; box-shadow: 0 8px 24px rgba(0,0,0,.08);
+      margin:14px 0;
+    }
+    .poem{ font-size:18px; line-height:1.6; text-align:justify; }
+    .video-card h2{ font-size:18px; margin:0 0 10px; }
+
+    /* Contenedor responsive 16:9 para el iframe */
+    .video-box{
+      position:relative; width:100%; aspect-ratio:16/9; border-radius:14px; overflow:hidden;
+      background:#000;
+    }
+    .video-box iframe{
+      position:absolute; inset:0; width:100%; height:100%; border:0;
+    }
+
+    .input-row{
+      display:flex; gap:8px; margin-top:10px;
+    }
+    input[type="url"]{
+      flex:1; font-size:14px; padding:10px 12px; border-radius:12px; border:1px solid #d7d9e0; outline:none;
+    }
+    button{
+      border:0; padding:10px 14px; border-radius:12px; font-weight:600; background:#111; color:#fff;
+    }
+
+    footer{ text-align:center; color:#888; font-size:12px; margin-top:18px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>ABLuz</h1>
+      <div class="subtitle">Poesía breve para mirar desde el celular</div>
+    </header>
+
+    <!-- Tu escrito -->
+    <section class="card">
+      <h2 style="margin:0 0 8px;font-size:20px;">Título del poema</h2>
+      <p class="poem">
+        Cuando cierro los ojos, la ciudad se vuelve un faro.
+        Tu nombre es un hilo de luz que no se corta.
+        Camino por dentro y todo late: abluz.
+      </p>
+    </section>
+
+    <!-- Video YouTube en un recuadro -->
+    <section class="card video-card">
+      <h2>Video (pega tu link de YouTube)</h2>
+
+      <div class="video-box" id="videoBox">
+        <!-- Video por defecto (puedes cambiarlo o dejarlo vacío) -->
+        <iframe id="ytFrame"
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+
+      <div class="input-row">
+        <input type="url" id="ytUrl" placeholder="https://www.youtube.com/watch?v=TU_ID" />
+        <button id="btnCargar">Cargar</button>
+      </div>
+      <small style="color:#666;display:block;margin-top:6px;">
+        Acepta links tipo: <em>watch?v=…</em>, <em>youtu.be/…</em> o <em>youtube.com/shorts/…</em>
+      </small>
+    </section>
+
+    <footer>© ABLuz</footer>
+  </main>
+
+  <script>
+    // Extrae el ID del video desde varios formatos de URL de YouTube
+    function extractYouTubeID(url) {
+      if (!url) return null;
+      try {
+        const u = new URL(url.trim());
+        if ((u.hostname === 'youtu.be') && u.pathname.length > 1) {
+          return u.pathname.slice(1); // youtu.be/VIDEOID
+        }
+        if (u.hostname.includes('youtube.com')) {
+          // watch?v=ID
+          if (u.searchParams.get('v')) return u.searchParams.get('v');
+          // shorts/ID o embed/ID
+          const parts = u.pathname.split('/').filter(Boolean);
+          const idx = parts.findIndex(p => p === 'shorts' || p === 'embed');
+          if (idx !== -1 && parts[idx+1]) return parts[idx+1];
+        }
+      } catch(e) { /* url inválida */ }
+      // Regex de respaldo
+      const m = url.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([A-Za-z0-9_-]{6,})/);
+      return m ? m[1] : null;
+    }
+
+    document.getElementById('btnCargar').addEventListener('click', () => {
+      const raw = document.getElementById('ytUrl').value;
+      const id = extractYouTubeID(raw);
+      const frame = document.getElementById('ytFrame');
+
+      if (id) {
+        frame.src = `https://www.youtube.com/embed/${id}`;
+      } else {
+        alert('No pude reconocer el ID del video. Verifica el link.');
+      }
+    });
+  </script>
+</body>
+</html>
+
+        Todo se verá adaptado a celular.
+    </p>
+</div>
+</body>
+</html>
