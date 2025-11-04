@@ -17,8 +17,6 @@
     .card h2 { font-size:20px; margin:0 0 10px; }
     .video-box { position:relative; width:100%; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#000; }
     .video-box iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
-    .controls { display:flex; gap:8px; margin-top:10px; }
-    .btn { border:0; padding:10px 14px; border-radius:12px; font-weight:600; background:#111; color:#fff; }
     .poem { font-size:18px; line-height:1.6; text-align:justify; white-space:pre-wrap; }
     footer { text-align:center; color:#888; font-size:12px; margin-top:18px; }
   </style>
@@ -27,50 +25,29 @@
   <main class="wrap">
     <header>
       <h1>ABLuz</h1>
-      <div class="subtitle">Video + Poesía en formato móvil</div>
+      <div class="subtitle">Video + Poesía</div>
     </header>
 
-    <!-- 1) VIDEO ARRIBA -->
+    <!-- VIDEO -->
     <section class="card">
-      <h2>Escuchar</h2>
       <div class="video-box">
-        <!-- Video fijo: -HBx9G09b64 -->
-        <iframe id="ytFrame"
-          src="https://www.youtube.com/embed/-HBx9G09b64?start=20&modestbranding=1&rel=0"
+        <iframe
+          src="https://www.youtube.com/embed/-HBx9G09b64?start=20&autoplay=1&mute=1&modestbranding=1&rel=0"
           title="YouTube"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
       </div>
-      <!-- Botones sin permitir cambiar el link -->
-      <div class="controls">
-        <button class="btn" id="btnInicio">Desde inicio</button>
-        <button class="btn" id="btnLapso">Desde 0:20</button>
-      </div>
     </section>
 
-    <!-- 2) POEMA ABAJO -->
+    <!-- POEMA -->
     <section class="card">
       <h2>Título del poema</h2>
       <p class="poem">
 Escribe aquí tu poema.
-Este bloque respeta saltos de línea y está pensado para leerse cómodo en el celular.
       </p>
     </section>
 
     <footer>© ABLuz</footer>
   </main>
-
-  <script>
-    // Fija el ID del video (nadie puede cambiarlo desde la página)
-    const VIDEO_ID = "-HBx9G09b64";
-    const frame = document.getElementById("ytFrame");
-
-    document.getElementById("btnInicio").addEventListener("click", () => {
-      frame.src = `https://www.youtube.com/embed/${VIDEO_ID}?start=0&modestbranding=1&rel=0`;
-    });
-    document.getElementById("btnLapso").addEventListener("click", () => {
-      frame.src = `https://www.youtube.com/embed/${VIDEO_ID}?start=20&modestbranding=1&rel=0`;
-    });
-  </script>
 </body>
 </html>
