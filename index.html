@@ -68,7 +68,7 @@
 
 <body>
 
-  <!-- Fondo videosur -->
+  <!-- Fondo -->
   <video class="bg-video" id="bgvid" playsinline muted autoplay loop preload="auto">
     <source src="VIDEOSUR.mp4?v=2" type="video/mp4" />
   </video>
@@ -80,17 +80,18 @@
       <div class="subtitle" style="opacity:.85;font-size:14px">Esto te pertenece</div>
     </header>
 
-    <!-- Recuadro (antes YouTube) ahora con tu MP4 -->
+    <!-- Recuadro canción -->
     <section class="card">
       <h2>Para ti…</h2>
       <div class="video-box" id="songBox">
-        <video id="song" playsinline muted autoplay preload="auto" controlslist="nodownload noplaybackrate">
+        <!-- quitamos controlslist y dejamos controls visibles -->
+        <video id="song" playsinline muted autoplay preload="auto" controls>
           <source src="gino.mp4" type="video/mp4" />
         </video>
         <div class="tap-audio" id="hint">🔊 toca para activar sonido</div>
       </div>
       <small style="display:block;opacity:.75;margin-top:8px">
-        Datito: Por culpa de las políticas de navegación, no se permite autoplay con audio así que toca el 🔊 para activar.
+        Datito: los navegadores no permiten autoplay con audio; toca el 🔊 para activar.
       </small>
     </section>
 
@@ -124,18 +125,19 @@ Y al sentir nuestra conexión tan nuestra, tan clara y comprendiendo...
     <footer>© Priss</footer>
   </main>
 
-
   <script>
     const song = document.getElementById('song');
     const hint = document.getElementById('hint');
     const songBox = document.getElementById('songBox');
 
+    // arranca desde 0:20 y trata de reproducir
     song.addEventListener('loadedmetadata', () => {
       try { song.currentTime = 20; } catch(_) {}
       const p = song.play();
       if (p && p.catch) p.catch(()=>{});
     });
 
+    // al tocar, desmutea y oculta el hint
     songBox.addEventListener('pointerdown', () => {
       song.muted = false;
       song.volume = 1.0;
