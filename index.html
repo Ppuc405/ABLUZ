@@ -84,14 +84,14 @@
     <section class="card">
       <h2>Para ti…</h2>
       <div class="video-box" id="songBox">
-        <!-- quitamos controlslist y dejamos controls visibles -->
-        <video id="song" playsinline muted autoplay preload="auto" controls>
+        <!-- Sin autoplay/muted: arrancamos al tocar -->
+        <video id="song" playsinline controls preload="metadata">
           <source src="gino.mp4" type="video/mp4" />
         </video>
         <div class="tap-audio" id="hint">🔊 toca para activar sonido</div>
       </div>
       <small style="display:block;opacity:.75;margin-top:8px">
-        Datito: los navegadores no permiten autoplay con audio; toca el 🔊 para activar.
+        Datito: algunos navegadores bloquean el autoplay con audio; toca el recuadro para reproducir.
       </small>
     </section>
 
@@ -126,24 +126,30 @@ Y al sentir nuestra conexión tan nuestra, tan clara y comprendiendo...
   </main>
 
   <script>
-    const song = document.getElementById('song');
-    const hint = document.getElementById('hint');
+    const song    = document.getElementById('song');
+    const hint    = document.getElementById('hint');
     const songBox = document.getElementById('songBox');
 
-    // arranca desde 0:20 y trata de reproducir
+    // Cuando haya metadatos, si es suficientemente largo, salta a 20s
     song.addEventListener('loadedmetadata', () => {
-      try { song.currentTime = 20; } catch(_) {}
-      const p = song.play();
-      if (p && p.catch) p.catch(()=>{});
+      try { if (Number.isFinite(song.duration) && song.duration > 25) song.currentTime = 20; } catch(_) {}
     });
 
-    // al tocar, desmutea y oculta el hint
-    songBox.addEventListener('pointerdown', () => {
-      song.muted = false;
-      song.volume = 1.0;
-      song.play();
-      if (hint) hint.style.display = 'none';
-    }, { once:true });
+    // En el primer toque dentro del área, forzamos carga y reproducción con audio
+    async function unlockAndPlay() {
+      try {
+        if (song.networkState === HTMLMediaElement.NETWORK_EMPTY) song.load();
+        song.muted = false;
+        song.volume = 1.0;
+        await song.play();
+        if (hint) hint.style.display = 'none';
+      } catch (e) {
+        // Si falla (p.ej. políticas del navegador), deja el mensaje para que presionen ▶️
+        if (hint) hint.textContent = 'Pulsa ▶️ para reproducir';
+      }
+    }
+
+    songBox.addEventListener('pointerdown', unlockAndPlay, { once: true });
   </script>
 
 </body>
